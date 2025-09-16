@@ -1,13 +1,154 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agent Plugin View</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/frontend/index.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActiFi AI - Portfolio Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo and Title -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">A</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                            ActiFi AI
+                        </h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Portfolio Advisor
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/portfolio-dashboard.html" 
+                       class="nav-link flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+                        <span class="mr-2">📊</span>
+                        Portfolio Dashboard
+                    </a>
+                    <a href="/portfolio-dashboard-with-nav.html" 
+                       class="nav-link flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                        <span class="mr-2">🧭</span>
+                        Dashboard with Nav
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Welcome to ActiFi AI Portfolio Advisor
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                Your intelligent crypto portfolio management assistant
+            </p>
+            
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                        $26,641.71
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Portfolio Value</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                        3
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Assets</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">
+                        Well Diversified
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Risk Level</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/portfolio-dashboard.html" 
+                   class="nav-link inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                    <span class="mr-2">📊</span>
+                    View Portfolio Dashboard
+                </a>
+                <a href="/portfolio-dashboard-with-nav.html" 
+                   class="nav-link inline-flex items-center px-6 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <span class="mr-2">🧭</span>
+                    Dashboard with Navigation
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Links Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a href="/portfolio-dashboard.html" 
+               class="nav-link bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="text-3xl mb-3">📊</div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Portfolio Dashboard</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Complete portfolio analysis with charts and metrics</p>
+                </div>
+            </a>
+            
+            <a href="/portfolio-dashboard-ink.html" 
+               class="nav-link bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="text-3xl mb-3">🎨</div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Ink Dashboard</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Portfolio dashboard with Ink design system</p>
+                </div>
+            </a>
+            
+            <a href="/portfolio-dashboard-direct.html" 
+               class="nav-link bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Direct Dashboard</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Simplified portfolio view for quick access</p>
+                </div>
+            </a>
+            
+            <a href="/portfolio-dashboard-with-nav.html" 
+               class="nav-link bg-blue-50 dark:bg-blue-900 rounded-lg shadow-lg p-6 hover:shadow-xl">
+                <div class="text-center">
+                    <div class="text-3xl mb-3">🧭</div>
+                    <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">Dashboard with Nav</h3>
+                    <p class="text-sm text-blue-600 dark:text-blue-300">Full-featured dashboard with navigation sidebar</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-sm text-gray-600 dark:text-gray-400">
+                Powered by ActiFi AI • Data from CoinGecko API • Not financial advice; educational only
+            </div>
+        </div>
+    </div>
+</body>
 </html>

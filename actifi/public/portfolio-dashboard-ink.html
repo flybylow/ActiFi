@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" class="ink:dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActiFi Portfolio Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@inkonchain/ink-kit@latest/dist/style.css">
+    <style>
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .chart-container-small {
+            position: relative;
+            height: 200px;
+        }
+        
+        /* Ink Kit Custom Overrides */
+        .ink-card {
+            background: var(--ink-surface);
+            border: 1px solid var(--ink-border);
+            border-radius: var(--ink-radius-lg);
+            padding: var(--ink-spacing-lg);
+            box-shadow: var(--ink-shadow-sm);
+        }
+        
+        .ink-button {
+            background: var(--ink-button-primary);
+            color: var(--ink-button-primary-foreground);
+            border: none;
+            border-radius: var(--ink-radius-md);
+            padding: var(--ink-spacing-sm) var(--ink-spacing-md);
+            font-weight: var(--ink-font-weight-medium);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .ink-button:hover {
+            background: var(--ink-button-primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .ink-button-secondary {
+            background: var(--ink-button-secondary);
+            color: var(--ink-button-secondary-foreground);
+        }
+        
+        .ink-button-secondary:hover {
+            background: var(--ink-button-secondary-hover);
+        }
+        
+        .ink-text-primary {
+            color: var(--ink-text-primary);
+        }
+        
+        .ink-text-secondary {
+            color: var(--ink-text-secondary);
+        }
+        
+        .ink-text-muted {
+            color: var(--ink-text-muted);
+        }
+        
+        .crypto-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .crypto-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+        
+        .performance-positive {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .performance-negative {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .performance-neutral {
+            color: #6b7280;
+            background: rgba(107, 114, 128, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--ink-accent) 0%, var(--ink-primary) 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <!-- Header with Ink Kit styling -->
+    <div class="glass-effect p-6 mb-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div>
+                <h1 class="text-4xl font-bold ink-text-primary mb-2">
+                    📊 ActiFi Portfolio Dashboard
+                </h1>
+                <p class="ink-text-secondary text-lg">
+                    Your crypto portfolio analysis and insights
+                </p>
+            </div>
+            <div class="flex space-x-4">
+                <button class="ink-button" onclick="refreshData()">
+                    🔄 Refresh Data
+                </button>
+                <button class="ink-button ink-button-secondary" onclick="exportData()">
+                    📊 Export Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 pb-12">
+        <!-- Portfolio Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="ink-card text-center">
+                <div class="text-4xl font-bold ink-text-primary mb-2">
+                    $26,682.86
+                </div>
+                <div class="ink-text-secondary">Total Portfolio Value</div>
+                <div class="performance-positive mt-2">+2.4% this week</div>
+            </div>
+            <div class="ink-card text-center">
+                <div class="text-4xl font-bold ink-text-primary mb-2">
+                    3
+                </div>
+                <div class="ink-text-secondary">Active Assets</div>
+                <div class="ink-text-muted text-sm mt-2">Well Diversified</div>
+            </div>
+            <div class="ink-card text-center">
+                <div class="text-4xl font-bold ink-text-primary mb-2">
+                    Medium
+                </div>
+                <div class="ink-text-secondary">Risk Level</div>
+                <div class="ink-text-muted text-sm mt-2">Balanced Portfolio</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Portfolio Allocation Chart -->
+            <div class="ink-card">
+                <h3 class="text-xl font-semibold ink-text-primary mb-6 flex items-center">
+                    <span class="mr-3">📊</span>
+                    Portfolio Allocation
+                </h3>
+                <div class="chart-container">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    <div class="text-center">
+                        <div class="w-4 h-4 bg-orange-500 rounded-full mx-auto mb-1"></div>
+                        <div class="text-sm ink-text-secondary">BTC 64.8%</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-4 h-4 bg-blue-500 rounded-full mx-auto mb-1"></div>
+                        <div class="text-sm ink-text-secondary">ETH 30.5%</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-1"></div>
+                        <div class="text-sm ink-text-secondary">USDC 4.7%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="ink-card">
+                <h3 class="text-xl font-semibold ink-text-primary mb-6 flex items-center">
+                    <span class="mr-3">📈</span>
+                    24h Performance
+                </h3>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="mt-4 flex justify-between text-sm">
+                    <div class="performance-positive">+0.09% BTC</div>
+                    <div class="performance-negative">-1.84% ETH</div>
+                    <div class="performance-negative">-0.01% USDC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asset Details with Real Crypto Icons -->
+        <div class="ink-card mb-8">
+            <h2 class="text-2xl font-semibold ink-text-primary mb-6 flex items-center">
+                <span class="mr-3">💰</span>
+                Asset Breakdown
+            </h2>
+            
+            <div class="space-y-4">
+                <!-- Bitcoin -->
+                <div class="flex items-center justify-between p-6 glass-effect rounded-lg hover:bg-opacity-20 transition-all duration-300">
+                    <div class="flex items-center space-x-6">
+                        <div class="crypto-icon bg-gradient-to-br from-orange-400 to-orange-600">
+                            <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">₿</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-xl ink-text-primary">
+                                Bitcoin (BTC)
+                            </div>
+                            <div class="ink-text-secondary">
+                                Digital Gold • Medium Risk • Layer 1
+                            </div>
+                            <div class="text-sm ink-text-muted mt-1">
+                                Market Cap: $1.2T • Dominance: 51.2%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right">
+                        <div class="font-bold text-2xl ink-text-primary mb-1">
+                            $17,296.50
+                        </div>
+                        <div class="ink-text-secondary mb-2">
+                            64.8% • 0.15 BTC
+                        </div>
+                        <div class="performance-positive">
+                            📈 +0.09% (24h) • +12.4% (7d)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ethereum -->
+                <div class="flex items-center justify-between p-6 glass-effect rounded-lg hover:bg-opacity-20 transition-all duration-300">
+                    <div class="flex items-center space-x-6">
+                        <div class="crypto-icon bg-gradient-to-br from-blue-500 to-purple-600">
+                            <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="Ethereum" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">Ξ</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-xl ink-text-primary">
+                                Ethereum (ETH)
+                            </div>
+                            <div class="ink-text-secondary">
+                                Smart Contracts • Medium Risk • Layer 1
+                            </div>
+                            <div class="text-sm ink-text-muted mt-1">
+                                Market Cap: $390B • TVL: $45.2B
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right">
+                        <div class="font-bold text-2xl ink-text-primary mb-1">
+                            $8,136.68
+                        </div>
+                        <div class="ink-text-secondary mb-2">
+                            30.5% • 1.8 ETH
+                        </div>
+                        <div class="performance-negative">
+                            📉 -1.84% (24h) • +8.2% (7d)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USDC -->
+                <div class="flex items-center justify-between p-6 glass-effect rounded-lg hover:bg-opacity-20 transition-all duration-300">
+                    <div class="flex items-center space-x-6">
+                        <div class="crypto-icon bg-gradient-to-br from-blue-600 to-blue-700">
+                            <img src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png" alt="USDC" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">$</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-xl ink-text-primary">
+                                USD Coin (USDC)
+                            </div>
+                            <div class="ink-text-secondary">
+                                Stablecoin • Low Risk • DeFi
+                            </div>
+                            <div class="text-sm ink-text-muted mt-1">
+                                Market Cap: $32.1B • Backed by USD
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right">
+                        <div class="font-bold text-2xl ink-text-primary mb-1">
+                            $1,249.67
+                        </div>
+                        <div class="ink-text-secondary mb-2">
+                            4.7% • 1,250 USDC
+                        </div>
+                        <div class="performance-negative">
+                            📉 -0.01% (24h) • +0.02% (7d)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Allocation with Ink Kit styling -->
+        <div class="ink-card mb-8">
+            <h2 class="text-2xl font-semibold ink-text-primary mb-6 flex items-center">
+                <span class="mr-3">🎯</span>
+                Visual Allocation
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="flex items-center">
+                    <div class="w-20 text-sm font-medium ink-text-primary flex items-center">
+                        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="BTC" class="w-6 h-6 mr-2" onerror="this.style.display='none';">
+                        BTC
+                    </div>
+                    <div class="flex-1 bg-gray-700 rounded-full h-8 mx-4 relative overflow-hidden">
+                        <div class="h-8 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-end pr-4" style="width: 64.8%">
+                            <span class="text-xs text-white font-bold">
+                                64.8%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-24 text-right text-sm font-medium ink-text-primary">
+                        $17,296
+                    </div>
+                </div>
+
+                <div class="flex items-center">
+                    <div class="w-20 text-sm font-medium ink-text-primary flex items-center">
+                        <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="ETH" class="w-6 h-6 mr-2" onerror="this.style.display='none';">
+                        ETH
+                    </div>
+                    <div class="flex-1 bg-gray-700 rounded-full h-8 mx-4 relative overflow-hidden">
+                        <div class="h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-end pr-4" style="width: 30.5%">
+                            <span class="text-xs text-white font-bold">
+                                30.5%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-24 text-right text-sm font-medium ink-text-primary">
+                        $8,136
+                    </div>
+                </div>
+
+                <div class="flex items-center">
+                    <div class="w-20 text-sm font-medium ink-text-primary flex items-center">
+                        <img src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png" alt="USDC" class="w-6 h-6 mr-2" onerror="this.style.display='none';">
+                        USDC
+                    </div>
+                    <div class="flex-1 bg-gray-700 rounded-full h-8 mx-4 relative overflow-hidden">
+                        <div class="h-8 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-end pr-4" style="width: 4.7%">
+                            <span class="text-xs text-white font-bold">
+                                4.7%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-24 text-right text-sm font-medium ink-text-primary">
+                        $1,250
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Summary with Ink Kit Cards -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Risk Distribution -->
+            <div class="ink-card">
+                <h3 class="text-xl font-semibold ink-text-primary mb-6 flex items-center">
+                    <span class="mr-3">⚠️</span>
+                    Risk Distribution
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="ink-text-secondary">Medium Risk</span>
+                        <div class="flex items-center">
+                            <div class="w-32 bg-gray-700 rounded-full h-3 mr-3">
+                                <div class="h-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500" style="width: 95.3%"></div>
+                            </div>
+                            <span class="font-medium ink-text-primary">95.3%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="ink-text-secondary">Low Risk</span>
+                        <div class="flex items-center">
+                            <div class="w-32 bg-gray-700 rounded-full h-3 mr-3">
+                                <div class="h-3 rounded-full bg-gradient-to-r from-green-400 to-green-600" style="width: 4.7%"></div>
+                            </div>
+                            <span class="font-medium ink-text-primary">4.7%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Metrics -->
+            <div class="ink-card">
+                <h3 class="text-xl font-semibold ink-text-primary mb-6 flex items-center">
+                    <span class="mr-3">📊</span>
+                    Key Metrics
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-4 glass-effect rounded-lg">
+                        <div class="text-2xl font-bold ink-text-primary">Medium</div>
+                        <div class="ink-text-secondary text-sm">Volatility</div>
+                    </div>
+                    <div class="text-center p-4 glass-effect rounded-lg">
+                        <div class="text-2xl font-bold text-green-400">High</div>
+                        <div class="ink-text-secondary text-sm">Liquidity</div>
+                    </div>
+                    <div class="text-center p-4 glass-effect rounded-lg">
+                        <div class="text-2xl font-bold text-green-400">Good</div>
+                        <div class="ink-text-secondary text-sm">Diversification</div>
+                    </div>
+                    <div class="text-center p-4 glass-effect rounded-lg">
+                        <div class="text-2xl font-bold text-blue-400">3</div>
+                        <div class="ink-text-secondary text-sm">Assets</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Portfolio Allocation Chart with enhanced styling
+        const allocationCtx = document.getElementById('allocationChart').getContext('2d');
+        new Chart(allocationCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bitcoin', 'Ethereum', 'USD Coin'],
+                datasets: [{
+                    data: [64.8, 30.5, 4.7],
+                    backgroundColor: [
+                        'rgba(249, 115, 22, 0.8)', // Bitcoin orange
+                        'rgba(99, 102, 241, 0.8)', // Ethereum blue
+                        'rgba(59, 130, 246, 0.8)'  // USDC blue
+                    ],
+                    borderColor: [
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(99, 102, 241, 1)',
+                        'rgba(59, 130, 246, 1)'
+                    ],
+                    borderWidth: 3,
+                    cutout: '65%',
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                        titleColor: '#F9FAFB',
+                        bodyColor: '#F9FAFB',
+                        borderColor: '#374151',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 16,
+                        callbacks: {
+                            label: function(context) {
+                                const values = ['$17,296', '$8,136', '$1,250'];
+                                return [
+                                    `${context.label}: ${context.parsed}%`,
+                                    `Value: ${values[context.dataIndex]}`
+                                ];
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true,
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+
+        // Performance Chart with enhanced styling
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['BTC', 'ETH', 'USDC'],
+                datasets: [{
+                    label: '24h Change %',
+                    data: [0.09, -1.84, -0.01],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',  // Green for positive
+                        'rgba(239, 68, 68, 0.8)',  // Red for negative
+                        'rgba(239, 68, 68, 0.8)'   // Red for negative
+                    ],
+                    borderColor: [
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(239, 68, 68, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                        titleColor: '#F9FAFB',
+                        bodyColor: '#F9FAFB',
+                        borderColor: '#374151',
+                        borderWidth: 1,
+                        cornerRadius: 12,
+                        padding: 16,
+                        callbacks: {
+                            label: function(context) {
+                                const change = context.parsed.x;
+                                const symbol = context.label;
+                                return `${symbol}: ${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(107, 114, 128, 0.2)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#9CA3AF',
+                            font: {
+                                size: 12,
+                                weight: '500'
+                            },
+                            callback: function(value) {
+                                return `${value}%`;
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#E5E7EB',
+                            font: {
+                                size: 14,
+                                weight: '600'
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                }
+            }
+        });
+
+        // Interactive functions
+        function refreshData() {
+            // Add loading animation
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔄 Refreshing...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                // Here you would typically fetch fresh data
+                console.log('Data refreshed!');
+            }, 2000);
+        }
+
+        function exportData() {
+            // Export portfolio data as JSON
+            const portfolioData = {
+                totalValue: 26682.86,
+                assets: [
+                    { symbol: 'BTC', value: 17296.50, percentage: 64.8 },
+                    { symbol: 'ETH', value: 8136.68, percentage: 30.5 },
+                    { symbol: 'USDC', value: 1249.67, percentage: 4.7 }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(portfolioData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'actifi-portfolio-data.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.glass-effect').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            });
+        });
+    </script>
+</body>
+</html>
