@@ -4,11 +4,23 @@
   "description": "ActiFi AI Portfolio Advisor - Root workspace",
   "scripts": {
     "start": "cd actifi && elizaos start",
-    "dev": "cd actifi && elizaos dev", 
+    "dev": "cd actifi && elizaos dev",
     "build": "cd actifi && bun run build",
     "test": "cd actifi && bun test",
     "typecheck": "cd actifi && bun run type-check"
   },
-  "keywords": ["actifi", "portfolio", "ai", "elizaos"],
-  "private": true
+  "keywords": [
+    "actifi",
+    "portfolio",
+    "ai",
+    "elizaos"
+  ],
+  "private": true,
+  "devDependencies": {
+    "@elizaos/cli": "^1.5.8"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "react-chartjs-2": "^5.3.0"
+  }
 }
