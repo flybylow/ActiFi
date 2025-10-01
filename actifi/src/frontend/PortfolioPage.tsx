@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { GuidedOnboarding } from './components/conversation/GuidedOnboarding';
 
 interface Asset {
   symbol: string;
@@ -19,6 +20,7 @@ interface PortfolioData {
 }
 
 const PortfolioPage: React.FC = () => {
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [portfolio, setPortfolio] = useState<PortfolioData>({
     totalValue: 26673.228,
     assets: [
@@ -60,6 +62,24 @@ const PortfolioPage: React.FC = () => {
 
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleTimeString());
 
+  // Check for first-time user and show onboarding
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('actifi-onboarding-seen');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('actifi-onboarding-seen', 'true');
+  };
+
+  const handleOnboardingSkip = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('actifi-onboarding-seen', 'true');
+  };
+
   // Simulate real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,167 +120,219 @@ const PortfolioPage: React.FC = () => {
       padding: '20px',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
+      {/* Guided Onboarding Modal */}
+      {showOnboarding && (
+        <GuidedOnboarding
+          onComplete={handleOnboardingComplete}
+          onSkip={handleOnboardingSkip}
+        />
+      )}
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Header */}
-        <div style={{ 
-          backgroundColor: '#1f2937', 
-          padding: '30px', 
-          borderRadius: '12px', 
-          marginBottom: '30px',
-          textAlign: 'center'
-        }}>
-          <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px 0', fontWeight: 'bold' }}>
-            📊 Portfolio Dashboard
-          </h1>
-          <p style={{ fontSize: '1.2rem', color: '#9ca3af', margin: '0' }}>
-            Real-time portfolio analysis • Last updated: {lastUpdated}
-          </p>
-        </div>
-
-        {/* Portfolio Overview */}
-        <div style={{ 
-          backgroundColor: '#1f2937', 
-          padding: '30px', 
-          borderRadius: '12px', 
+        {/* Portfolio Dashboard Message */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: '30px',
           marginBottom: '30px'
         }}>
-          <h2 style={{ fontSize: '1.8rem', margin: '0 0 20px 0' }}>Portfolio Overview</h2>
-          
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '20px',
+          <div style={{
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            color: 'white',
+            marginBottom: '10px'
+          }}>
+            📊 Dynamic Portfolio Dashboard
+          </div>
+          <div style={{
+            fontSize: '1rem',
+            color: 'rgba(255, 255, 255, 0.7)',
+            marginBottom: '8px'
+          }}>
+            Real-time portfolio analysis and insights
+          </div>
+          <div style={{
+            fontSize: '0.9rem',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }}>
+            Last updated: {lastUpdated} • Risk Level : Well Diversified, your portfolio is well balanced.
+          </div>
+        </div>
+
+        {/* Portfolio Overview Message */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: '30px',
+          marginBottom: '30px'
+        }}>
+          <div style={{
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            color: 'white',
+            marginBottom: '15px'
+          }}>
+            📊 Portfolio Overview
+          </div>
+          <div style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            color: '#10b981',
+            marginBottom: '8px'
+          }}>
+            $26,582.48 Total Value
+          </div>
+          <div style={{
+            fontSize: '1.1rem',
+            color: 'rgba(255, 255, 255, 0.8)',
+            marginBottom: '8px'
+          }}>
+            3 Assets
+          </div>
+          <div style={{
+            fontSize: '1rem',
+            color: 'rgba(255, 255, 255, 0.7)',
+            marginBottom: '10px'
+          }}>
+            Well Diversified Risk Level
+          </div>
+          <div style={{
+            fontSize: '0.9rem',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }}>
+            Portfolio Allocation: BTC 64.8% • ETH 30.5% • USDC 4.7%
+          </div>
+        </div>
+
+        {/* Portfolio Charts Message */}
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: '30px',
+          marginBottom: '30px'
+        }}>
+          <div style={{
+            fontSize: '1.2rem',
+            fontWeight: '600',
+            color: 'white',
+            marginBottom: '15px'
+          }}>
+            📊 Portfolio Allocation & 24h Performance
+          </div>
+          <div style={{
+            fontSize: '1rem',
+            color: 'rgba(255, 255, 255, 0.8)',
+            marginBottom: '10px'
+          }}>
+            Your portfolio is allocated 64.8% Bitcoin, 30.5% Ethereum, and 4.7% USD Coin.
+          </div>
+          <div style={{
+            fontSize: '0.9rem',
+            color: 'rgba(255, 255, 255, 0.7)'
+          }}>
+            24h changes: BTC -0.14% • ETH -2.27% • USDC +0.02%
+          </div>
+        </div>
+
+        {/* Asset Breakdown Messages */}
+        {portfolio.assets.map((asset) => (
+          <div key={asset.symbol} style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            padding: '30px',
             marginBottom: '30px'
           }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#10b981' }}>
-                {formatCurrency(portfolio.totalValue)}
-              </div>
-              <div style={{ color: '#9ca3af' }}>Total Value</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#3b82f6' }}>
-                {portfolio.totalAssets}
-              </div>
-              <div style={{ color: '#9ca3af' }}>Assets</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#f59e0b' }}>
-                {portfolio.diversification}
-              </div>
-              <div style={{ color: '#9ca3af' }}>Diversification</div>
-            </div>
-          </div>
-
-          {/* Risk Distribution */}
-          <div>
-            <h3 style={{ fontSize: '1.3rem', margin: '0 0 15px 0' }}>Risk Distribution</h3>
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-              {portfolio.riskDistribution.map((risk, index) => (
-                <div key={index} style={{ 
-                  backgroundColor: '#374151', 
-                  padding: '15px', 
-                  borderRadius: '8px',
-                  flex: '1',
-                  minWidth: '200px'
-                }}>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 'bold', textTransform: 'capitalize' }}>
-                    {risk.level} Risk
-                  </div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#10b981' }}>
-                    {formatCurrency(risk.value)}
-                  </div>
-                  <div style={{ color: '#9ca3af' }}>
-                    {risk.percentage}%
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Asset Breakdown */}
-        <div style={{ 
-          backgroundColor: '#1f2937', 
-          padding: '30px', 
-          borderRadius: '12px'
-        }}>
-          <h2 style={{ fontSize: '1.8rem', margin: '0 0 20px 0' }}>Asset Breakdown</h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            {portfolio.assets.map((asset) => (
-              <div key={asset.symbol} style={{ 
-                backgroundColor: '#374151', 
-                padding: '20px', 
-                borderRadius: '8px',
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px',
+              marginBottom: '15px'
+            }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                background: asset.symbol === 'BTC' ? 'linear-gradient(135deg, #f7931a, #ff6b35)' :
+                            asset.symbol === 'ETH' ? 'linear-gradient(135deg, #627eea, #4f46e5)' :
+                            'linear-gradient(135deg, #2775ca, #1e40af)',
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                color: 'white'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <div style={{ 
-                    width: '50px', 
-                    height: '50px', 
-                    borderRadius: '50%', 
-                    backgroundColor: asset.symbol === 'BTC' ? '#f59e0b' : 
-                                    asset.symbol === 'ETH' ? '#3b82f6' : '#10b981',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold'
-                  }}>
-                    {asset.symbol.charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-                      {asset.name} ({asset.symbol})
-                    </div>
-                    <div style={{ color: '#9ca3af' }}>
-                      {asset.amount} {asset.symbol} • {formatCurrency(asset.value / asset.amount)}
-                    </div>
-                  </div>
+                {asset.symbol.charAt(0)}
+              </div>
+              <div>
+                <div style={{
+                  fontSize: '1.3rem',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  marginBottom: '5px'
+                }}>
+                  {asset.name} {asset.amount} {asset.symbol}
                 </div>
-                
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>
-                    {formatCurrency(asset.value)}
-                  </div>
-                  <div style={{ color: '#9ca3af' }}>
-                    {asset.percentage}%
-                  </div>
-                  <div style={{ 
-                    fontSize: '1rem',
-                    color: asset.change24h >= 0 ? '#10b981' : '#ef4444',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    gap: '5px'
-                  }}>
-                    {asset.change24h >= 0 ? '📈' : '📉'} {formatPercentage(asset.change24h)}
-                  </div>
+                <div style={{
+                  fontSize: '1.1rem',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  marginBottom: '5px'
+                }}>
+                  {formatCurrency(asset.value)} ({asset.percentage}% of portfolio)
+                </div>
+                <div style={{
+                  fontSize: '1rem',
+                  color: asset.change24h >= 0 ? '#10b981' : '#ef4444',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}>
+                  <span>{asset.change24h >= 0 ? '📈' : '📉'}</span>
+                  <span>{asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}% (24h)</span>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        ))}
 
-        {/* Navigation */}
-        <div style={{ 
-          marginTop: '30px', 
-          textAlign: 'center',
-          padding: '20px'
-        }}>
-          <a 
-            href="/" 
-            style={{ 
-              color: '#60a5fa', 
-              textDecoration: 'underline',
-              fontSize: '1.1rem'
+        {/* Show Tour Again Button */}
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <button
+            onClick={() => setShowOnboarding(true)}
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              color: 'white',
+              padding: '12px 24px',
+              borderRadius: '25px',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              fontWeight: '500',
+              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
             }}
           >
-            ← Back to Home
-          </a>
+            🎯 Show Tour Again
+          </button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import { Card } from '@inkonchain/ink-kit';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -208,29 +209,30 @@ const DynamicPortfolioDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                📊 Dynamic Portfolio Dashboard
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Real-time portfolio analysis and insights
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                Last updated: {portfolio.lastUpdated}
+    <div className="min-h-screen bg-background">
+      <div className="p-4">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">
+                  📊 Dynamic Portfolio Dashboard
+                </h1>
+                <p className="text-muted-foreground mt-2">
+                  Real-time portfolio analysis and insights
+                </p>
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                Risk Level: {portfolio.riskLevel}
+              <div className="text-right">
+                <div className="text-sm text-muted-foreground">
+                  Last updated: {portfolio.lastUpdated}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Risk Level: {portfolio.riskLevel}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </Card>
 
         {/* Portfolio Overview */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
@@ -342,6 +344,7 @@ const DynamicPortfolioDashboard: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         </div>
       </div>

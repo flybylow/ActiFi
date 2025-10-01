@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -19,7 +19,11 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', '@tanstack/react-query', 'chart.js', 'react-chartjs-2'],
+    include: ['react', 'react-dom/client', '@tanstack/react-query', 'chart.js', 'react-chartjs-2'],
+    force: true,
+    esbuildOptions: {
+      target: 'esnext',
+    },
   },
   resolve: {
     alias: {
@@ -31,7 +35,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

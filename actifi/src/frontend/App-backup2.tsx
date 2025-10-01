@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
 
   const handleQuestionClick = (question: string) => {
     setChatInput(question);
-    setHoveredBox(null);
+    // Scroll to chat input
     setTimeout(() => {
       if (chatInputRef.current) {
         chatInputRef.current.focus();
@@ -74,11 +74,6 @@ const HomePage: React.FC = () => {
       "Is my portfolio allocation optimal?",
       "How should I diversify my investments?",
       "What's the ideal asset allocation for my risk tolerance?"
-    ],
-    risk: [
-      "What's my current risk level?",
-      "How can I reduce portfolio risk?",
-      "Should I increase my risk exposure?"
     ],
     increase: [
       "What caused this portfolio increase?",
@@ -112,31 +107,26 @@ const HomePage: React.FC = () => {
     return (
       <div style={{
         position: 'absolute',
-        top: '0',
-        left: '0',
-        right: '0',
-        bottom: '0',
-        background: 'rgba(0, 0, 0, 0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 999999
+        top: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        marginTop: '12px',
+        background: 'rgba(20, 20, 40, 0.95)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '12px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+        padding: '16px',
+        minWidth: '320px',
+        maxWidth: '400px',
+        zIndex: 1000
       }}>
         <div style={{
-          background: 'rgba(20, 20, 40, 0.95)',
-          borderRadius: '12px',
-          border: '2px solid rgba(102, 126, 234, 0.3)',
-          padding: '20px',
-          minWidth: '360px',
-          maxWidth: '420px',
-          textAlign: 'center'
-        }}>
-        <div style={{
-          fontSize: '13px',
-          color: 'rgba(255, 255, 255, 0.8)',
-          marginBottom: '14px',
+          fontSize: '12px',
+          color: 'rgba(255, 255, 255, 0.6)',
+          marginBottom: '12px',
           textAlign: 'center',
-          fontWeight: '600'
+          fontWeight: '500'
         }}>
           💬 Click a question to ask:
         </div>
@@ -147,32 +137,31 @@ const HomePage: React.FC = () => {
             style={{
               width: '100%',
               textAlign: 'left',
-              padding: '12px 14px',
+              padding: '10px 12px',
               marginBottom: index < questions.length - 1 ? '8px' : '0',
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '8px',
-              color: 'rgba(255, 255, 255, 0.95)',
+              color: 'rgba(255, 255, 255, 0.9)',
               fontSize: '13px',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
-              lineHeight: '1.5'
+              lineHeight: '1.4'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.25)';
-              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.5)';
+              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.2)';
+              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.4)';
               e.currentTarget.style.transform = 'translateX(4px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
               e.currentTarget.style.transform = 'translateX(0)';
             }}
           >
             {question}
           </button>
         ))}
-        </div>
       </div>
     );
   };
@@ -235,7 +224,6 @@ const HomePage: React.FC = () => {
             style={{
               flex: 1,
               position: 'relative',
-              zIndex: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -302,7 +290,6 @@ const HomePage: React.FC = () => {
             style={{
               flex: 1,
               position: 'relative',
-              zIndex: 10,
               padding: '20px',
               background: 'rgba(255, 255, 255, 0.05)',
               borderRadius: '12px',
@@ -413,59 +400,6 @@ const HomePage: React.FC = () => {
               isVisible={hoveredBox === 'allocation'} 
             />
           </div>
-
-          {/* Right: Risk Level */}
-          <div 
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('risk')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
-            <div style={{ textAlign: 'center' }}>
-              <h2 style={{
-                fontSize: '18px',
-                fontWeight: '600',
-                color: 'white',
-                marginBottom: '16px'
-              }}>
-                ⚖️ Risk Level
-              </h2>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'rgba(16, 185, 129, 0.2)',
-                color: '#10b981',
-                padding: '12px 20px',
-                borderRadius: '12px',
-                border: '1px solid rgba(16, 185, 129, 0.3)'
-              }}>
-                <span style={{ fontSize: '14px', fontWeight: '500' }}>Risk Level</span>
-                <span style={{ fontSize: '16px', fontWeight: 'bold' }}>Well Diversified</span>
-              </div>
-            </div>
-            
-            <QuestionTooltip 
-              questions={tooltipQuestions.risk || [
-                "What's my current risk level?",
-                "How can I reduce portfolio risk?",
-                "Should I increase my risk exposure?"
-              ]} 
-              isVisible={hoveredBox === 'risk'} 
-            />
-          </div>
         </div>
       </div>
 
@@ -489,7 +423,6 @@ const HomePage: React.FC = () => {
             style={{
               flex: 1,
               position: 'relative',
-              zIndex: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -548,7 +481,6 @@ const HomePage: React.FC = () => {
             style={{
               flex: 2,
               position: 'relative',
-              zIndex: 10,
               padding: '20px',
               background: 'rgba(255, 255, 255, 0.05)',
               borderRadius: '12px',
@@ -668,6 +600,15 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Risk Level Widget */}
+      <Card className="p-6 mb-8">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full">
+            <span className="text-sm font-medium">Risk Level</span>
+            <span className="font-bold">Well Diversified</span>
+          </div>
+        </div>
+      </Card>
 
       {/* Current Prices Row */}
       <PriceTicker />

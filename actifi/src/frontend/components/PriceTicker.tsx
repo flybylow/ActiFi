@@ -6,12 +6,13 @@ interface PriceData {
   price: number;
   change24h: number;
   volume: number;
+  amount: number;
 }
 
 const mockPriceData: PriceData[] = [
-  { symbol: 'BTC', name: 'Bitcoin', price: 115105.00, change24h: 0.02, volume: 28473920123 },
-  { symbol: 'ETH', name: 'Ethereum', price: 4514.56, change24h: -2.10, volume: 15234567890 },
-  { symbol: 'USDC', name: 'USD Coin', price: 1.00, change24h: 0.00, volume: 8765432109 }
+  { symbol: 'BTC', name: 'Bitcoin', price: 115106, change24h: -0.02, volume: 28473920123, amount: 0.15 },
+  { symbol: 'ETH', name: 'Ethereum', price: 4511, change24h: -2.07, volume: 15234567890, amount: 1.8 },
+  { symbol: 'USDC', name: 'USD Coin', price: 1.00, change24h: 0.00, volume: 8765432109, amount: 1250 }
 ];
 
 interface PriceTickerProps {
@@ -58,27 +59,74 @@ const PriceTicker: React.FC<PriceTickerProps> = ({ compact = false }) => {
 
   if (compact) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '12px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        padding: '16px'
+      }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: '600',
+          color: 'white',
+          marginBottom: '12px'
+        }}>
           💰 Live Prices
         </h3>
-        <div className="space-y-2">
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          overflowX: 'auto'
+        }}>
           {prices.map((price) => (
-            <div key={price.symbol} className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-xs font-medium text-gray-900 dark:text-white">
-                  {price.symbol}
-                </span>
+            <div key={price.symbol} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 12px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              borderRadius: '8px',
+              minWidth: '120px',
+              flexShrink: 0
+            }}>
+              <div style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                background: price.symbol === 'BTC' ? 'linear-gradient(135deg, #f7931a, #ff6b35)' :
+                           price.symbol === 'ETH' ? 'linear-gradient(135deg, #627eea, #4f46e5)' :
+                           'linear-gradient(135deg, #2775ca, #1e40af)'
+              }}>
+                {price.symbol.charAt(0)}
               </div>
-              <div className="text-right">
-                <div className="text-xs font-medium text-gray-900 dark:text-white">
-                  {formatPrice(price.price)}
+              <div style={{ flex: 1 }}>
+                <div style={{
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: 'white'
+                }}>
+                  {price.symbol}
                 </div>
-                <div className={`text-xs ${
-                  price.change24h >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
+                <div style={{
+                  fontSize: '11px',
+                  color: price.change24h >= 0 ? '#10b981' : '#ef4444'
+                }}>
                   {formatPercentage(price.change24h)}
                 </div>
+              </div>
+              <div style={{
+                fontSize: '12px',
+                fontWeight: '600',
+                color: 'white'
+              }}>
+                {formatPrice(price.price)}
               </div>
             </div>
           ))}
@@ -88,44 +136,102 @@ const PriceTicker: React.FC<PriceTickerProps> = ({ compact = false }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-      <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+    <div style={{
+      background: 'rgba(255, 255, 255, 0.05)',
+      borderRadius: '16px',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+    }}>
+      <div style={{ padding: '24px' }}>
+        <h2 style={{
+          fontSize: '18px',
+          fontWeight: '600',
+          color: 'white',
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
           💰 Live Price Ticker
         </h2>
         
-        <div className="space-y-4">
+        <div style={{
+          display: 'flex',
+          gap: '16px',
+          overflowX: 'auto',
+          paddingBottom: '8px'
+        }}>
           {prices.map((price) => (
-            <div key={price.symbol} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="flex items-center space-x-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                  price.symbol === 'BTC' ? 'bg-orange-500' :
-                  price.symbol === 'ETH' ? 'bg-blue-500' :
-                  'bg-blue-600'
-                }`}>
-                  {price.symbol.charAt(0)}
+            <div key={price.symbol} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              minWidth: '280px',
+              flexShrink: 0
+            }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                background: price.symbol === 'BTC' ? 'linear-gradient(135deg, #f7931a, #ff6b35)' :
+                           price.symbol === 'ETH' ? 'linear-gradient(135deg, #627eea, #4f46e5)' :
+                           'linear-gradient(135deg, #2775ca, #1e40af)'
+              }}>
+                {price.symbol.charAt(0)}
+              </div>
+              
+              <div style={{ flex: 1 }}>
+                <div style={{
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: 'white',
+                  marginBottom: '2px'
+                }}>
+                  {price.name}
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900 dark:text-white">
-                    {price.name}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {price.symbol}
-                  </div>
+                <div style={{
+                  fontSize: '12px',
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  marginBottom: '4px'
+                }}>
+                  {price.symbol}
+                </div>
+                <div style={{
+                  fontSize: '11px',
+                  color: 'rgba(255, 255, 255, 0.6)'
+                }}>
+                  Vol: ${(price.volume / 1000000000).toFixed(1)}B
                 </div>
               </div>
               
-              <div className="text-right">
-                <div className="text-lg font-bold text-gray-900 dark:text-white">
+              <div style={{ textAlign: 'right' }}>
+                <div style={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  marginBottom: '4px'
+                }}>
                   {formatPrice(price.price)}
                 </div>
-                <div className={`text-sm flex items-center justify-end ${
-                  price.change24h >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {price.change24h >= 0 ? '📈' : '📉'} {formatPercentage(price.change24h)}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">
-                  Vol: ${(price.volume / 1000000000).toFixed(1)}B
+                <div style={{
+                  fontSize: '12px',
+                  color: price.change24h >= 0 ? '#10b981' : '#ef4444',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  gap: '4px'
+                }}>
+                  <span>{price.change24h >= 0 ? '📈' : '📉'}</span>
+                  <span>{formatPercentage(price.change24h)}</span>
                 </div>
               </div>
             </div>

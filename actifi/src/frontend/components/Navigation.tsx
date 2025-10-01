@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@inkonchain/ink-kit';
 
 interface NavigationProps {
   className?: string;
@@ -32,73 +33,123 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
   ];
 
   return (
-    <nav className={`bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav style={{
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 50
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 20px'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '70px'
+        }}>
           {/* Logo */}
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}>
+              <span style={{
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '18px'
+              }}>A</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h1 style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                color: 'white',
+                margin: 0,
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>
                 ActiFi AI
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.8)',
+                margin: 0,
+                fontWeight: '500'
+              }}>
                 Portfolio Advisor
               </p>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
-                  location.pathname === item.path
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: '25px',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  background: location.pathname === item.path 
+                    ? 'rgba(255, 255, 255, 0.2)' 
+                    : 'transparent',
+                  border: location.pathname === item.path 
+                    ? '1px solid rgba(255, 255, 255, 0.3)' 
+                    : '1px solid transparent',
+                  backdropFilter: 'blur(10px)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  minWidth: '120px'
+                }}
+                onMouseOver={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.border = '1px solid transparent';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
               >
-                <div className="flex flex-col items-center">
-                  <span className="text-lg">{item.label}</span>
-                  <span className="text-xs opacity-75">{item.description}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`block px-3 py-2 text-base font-medium rounded-md transition-colors duration-200 ${
-                  location.pathname === item.path
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                <div className="flex items-center">
-                  <span className="mr-3">{item.label}</span>
-                  <span className="text-sm opacity-75">{item.description}</span>
-                </div>
+                <span style={{
+                  fontSize: '20px',
+                  color: 'white',
+                  marginBottom: '2px'
+                }}>{item.label}</span>
+                <span style={{
+                  fontSize: '11px',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontWeight: '500',
+                  textAlign: 'center'
+                }}>{item.description}</span>
               </Link>
             ))}
           </div>

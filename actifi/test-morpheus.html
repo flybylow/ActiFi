@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="ink:morpheus-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpheus Theme Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@inkonchain/ink-kit@0.9.1-beta.19/dist/style.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background-color: var(--ink-background-dark);
+            color: var(--ink-text-default);
+        }
+        .test-button {
+            background-color: var(--ink-button-primary);
+            color: var(--ink-text-on-primary);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-card {
+            background-color: var(--ink-background-container);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid var(--ink-background-light);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background-color: var(--ink-status-success);
+            color: var(--ink-text-on-primary);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Morpheus Theme Test</h1>
+    
+    <div class="test-card">
+        <h2>CSS Variables Test</h2>
+        <p>Background: <span id="bg-color">Loading...</span></p>
+        <p>Text Color: <span id="text-color">Loading...</span></p>
+        <p>Button Primary: <span id="btn-color">Loading...</span></p>
+    </div>
+    
+    <div class="test-card">
+        <h2>Components Test</h2>
+        <button class="test-button">Primary Button</button>
+        <button class="test-button" style="background-color: var(--ink-status-alert);">Alert Button</button>
+        <button class="test-button" style="background-color: var(--ink-status-error);">Error Button</button>
+    </div>
+    
+    <div class="status">
+        ✅ If you can see this with proper colors, Morpheus theme is working!
+    </div>
+    
+    <script>
+        // Test CSS variables
+        const root = document.documentElement;
+        const computedStyle = getComputedStyle(root);
+        
+        document.getElementById('bg-color').textContent = computedStyle.getPropertyValue('--ink-background-dark');
+        document.getElementById('text-color').textContent = computedStyle.getPropertyValue('--ink-text-default');
+        document.getElementById('btn-color').textContent = computedStyle.getPropertyValue('--ink-button-primary');
+        
+        console.log('🎨 Morpheus Theme Test');
+        console.log('Background:', computedStyle.getPropertyValue('--ink-background-dark'));
+        console.log('Text:', computedStyle.getPropertyValue('--ink-text-default'));
+        console.log('Button:', computedStyle.getPropertyValue('--ink-button-primary'));
+        console.log('Theme class:', document.documentElement.className);
+    </script>
+</body>
+</html>

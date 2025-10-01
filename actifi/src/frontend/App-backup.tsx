@@ -49,49 +49,6 @@ declare global {
 
 // Home/Chat Page Component
 const HomePage: React.FC = () => {
-  const [hoveredBox, setHoveredBox] = React.useState<string | null>(null);
-  const [chatInput, setChatInput] = React.useState('');
-  const chatInputRef = React.useRef<HTMLInputElement>(null);
-
-  const handleQuestionClick = (question: string) => {
-    setChatInput(question);
-    setHoveredBox(null);
-    setTimeout(() => {
-      if (chatInputRef.current) {
-        chatInputRef.current.focus();
-        chatInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 100);
-  };
-
-  const tooltipQuestions = {
-    wallet: [
-      "How can I increase my total portfolio value?",
-      "What's the best way to track my portfolio performance?",
-      "Should I rebalance my portfolio?"
-    ],
-    allocation: [
-      "Is my portfolio allocation optimal?",
-      "How should I diversify my investments?",
-      "What's the ideal asset allocation for my risk tolerance?"
-    ],
-    risk: [
-      "What's my current risk level?",
-      "How can I reduce portfolio risk?",
-      "Should I increase my risk exposure?"
-    ],
-    increase: [
-      "What caused this portfolio increase?",
-      "How can I maintain this growth rate?",
-      "Is this performance sustainable?"
-    ],
-    holdings: [
-      "Should I buy more Bitcoin?",
-      "Is Ethereum a good investment right now?",
-      "How much should I keep in stablecoins?"
-    ]
-  };
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -103,78 +60,6 @@ const HomePage: React.FC = () => {
 
   const formatPercentage = (value: number) => {
     return `${value > 0 ? '+' : ''}${value.toFixed(2)}%`;
-  };
-
-  // Tooltip Component
-  const QuestionTooltip: React.FC<{ questions: string[]; isVisible: boolean }> = ({ questions, isVisible }) => {
-    if (!isVisible) return null;
-
-    return (
-      <div style={{
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        right: '0',
-        bottom: '0',
-        background: 'rgba(0, 0, 0, 0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 999999
-      }}>
-        <div style={{
-          background: 'rgba(20, 20, 40, 0.95)',
-          borderRadius: '12px',
-          border: '2px solid rgba(102, 126, 234, 0.3)',
-          padding: '20px',
-          minWidth: '360px',
-          maxWidth: '420px',
-          textAlign: 'center'
-        }}>
-        <div style={{
-          fontSize: '13px',
-          color: 'rgba(255, 255, 255, 0.8)',
-          marginBottom: '14px',
-          textAlign: 'center',
-          fontWeight: '600'
-        }}>
-          💬 Click a question to ask:
-        </div>
-        {questions.map((question, index) => (
-          <button
-            key={index}
-            onClick={() => handleQuestionClick(question)}
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              padding: '12px 14px',
-              marginBottom: index < questions.length - 1 ? '8px' : '0',
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '8px',
-              color: 'rgba(255, 255, 255, 0.95)',
-              fontSize: '13px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              lineHeight: '1.5'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.25)';
-              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.5)';
-              e.currentTarget.style.transform = 'translateX(4px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-              e.currentTarget.style.transform = 'translateX(0)';
-            }}
-          >
-            {question}
-          </button>
-        ))}
-        </div>
-      </div>
-    );
   };
 
   const assets = [
@@ -215,41 +100,38 @@ const HomePage: React.FC = () => {
         </div>
       </Card>
 
-      {/* Combined Total Wallet and Portfolio Allocation */}
+      {/* Total Wallet and Portfolio Allocation */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-        padding: '24px',
+        display: 'flex',
+        gap: '20px',
         marginBottom: '40px'
       }}>
+        {/* Total Wallet */}
         <div style={{
-          display: 'flex',
-          gap: '24px',
-          alignItems: 'stretch'
+          flex: 1,
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: '24px'
         }}>
-          {/* Left: Total Wallet */}
-          <div 
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px',
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('wallet')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
+          <h2 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            color: 'white',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            💼 Total Wallet Value
+          </h2>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '20px'
+          }}>
             <div style={{
               width: '60px',
               height: '60px',
@@ -266,14 +148,6 @@ const HomePage: React.FC = () => {
             </div>
             
             <div style={{ textAlign: 'center' }}>
-              <h2 style={{
-                fontSize: '18px',
-                fontWeight: '600',
-                color: 'white',
-                marginBottom: '12px'
-              }}>
-                💼 Total Wallet Value
-              </h2>
               <div style={{
                 fontSize: '2.5rem',
                 fontWeight: 'bold',
@@ -290,181 +164,112 @@ const HomePage: React.FC = () => {
                 Total Portfolio Value
               </div>
             </div>
-            
-            <QuestionTooltip 
-              questions={tooltipQuestions.wallet} 
-              isVisible={hoveredBox === 'wallet'} 
-            />
           </div>
+        </div>
 
-          {/* Right: Portfolio Allocation */}
-          <div 
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 10,
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('allocation')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
-            <h2 style={{
-              fontSize: '18px',
-              fontWeight: '600',
-              color: 'white',
-              marginBottom: '20px',
-              textAlign: 'center'
-            }}>
-              📊 Portfolio Allocation
-            </h2>
-            
+        {/* Portfolio Allocation Donut */}
+        <div style={{
+          flex: 1,
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: '24px'
+        }}>
+          <h2 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            color: 'white',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            📊 Portfolio Allocation
+          </h2>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '20px'
+          }}>
+            {/* Donut Chart SVG */}
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px'
+              width: '120px',
+              height: '120px',
+              position: 'relative'
             }}>
-              {/* Donut Chart SVG */}
-              <div style={{
-                width: '120px',
-                height: '120px',
-                position: 'relative'
-              }}>
-                <svg width="120" height="120" style={{ transform: 'rotate(-90deg)' }}>
-                  {/* Background circle */}
-                  <circle
-                    cx="60" cy="60" r="50"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.1)"
-                    strokeWidth="8"
-                  />
-                  {/* Bitcoin segment (64.8%) */}
-                  <circle
-                    cx="60" cy="60" r="50"
-                    fill="none"
-                    stroke="#f7931a"
-                    strokeWidth="8"
-                    strokeDasharray={`${64.8 * 3.14159} 314.159`}
-                    strokeDashoffset="0"
-                    strokeLinecap="round"
-                  />
-                  {/* Ethereum segment (30.5%) */}
-                  <circle
-                    cx="60" cy="60" r="50"
-                    fill="none"
-                    stroke="#627eea"
-                    strokeWidth="8"
-                    strokeDasharray={`${30.5 * 3.14159} 314.159`}
-                    strokeDashoffset={`-${64.8 * 3.14159}`}
-                    strokeLinecap="round"
-                  />
-                  {/* USDC segment (4.7%) */}
-                  <circle
-                    cx="60" cy="60" r="50"
-                    fill="none"
-                    stroke="#2775ca"
-                    strokeWidth="8"
-                    strokeDasharray={`${4.7 * 3.14159} 314.159`}
-                    strokeDashoffset={`-${(64.8 + 30.5) * 3.14159}`}
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-              
-              {/* Legend */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    background: '#f7931a'
-                  }}></div>
-                  <span style={{ color: 'white', fontSize: '14px' }}>Bitcoin 64.8%</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    background: '#627eea'
-                  }}></div>
-                  <span style={{ color: 'white', fontSize: '14px' }}>Ethereum 30.5%</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    background: '#2775ca'
-                  }}></div>
-                  <span style={{ color: 'white', fontSize: '14px' }}>USD Coin 4.7%</span>
-                </div>
-              </div>
+              <svg width="120" height="120" style={{ transform: 'rotate(-90deg)' }}>
+                {/* Background circle */}
+                <circle
+                  cx="60" cy="60" r="50"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.1)"
+                  strokeWidth="8"
+                />
+                {/* Bitcoin segment (64.8%) */}
+                <circle
+                  cx="60" cy="60" r="50"
+                  fill="none"
+                  stroke="#f7931a"
+                  strokeWidth="8"
+                  strokeDasharray={`${64.8 * 3.14159} 314.159`}
+                  strokeDashoffset="0"
+                  strokeLinecap="round"
+                />
+                {/* Ethereum segment (30.5%) */}
+                <circle
+                  cx="60" cy="60" r="50"
+                  fill="none"
+                  stroke="#627eea"
+                  strokeWidth="8"
+                  strokeDasharray={`${30.5 * 3.14159} 314.159`}
+                  strokeDashoffset={`-${64.8 * 3.14159}`}
+                  strokeLinecap="round"
+                />
+                {/* USDC segment (4.7%) */}
+                <circle
+                  cx="60" cy="60" r="50"
+                  fill="none"
+                  stroke="#2775ca"
+                  strokeWidth="8"
+                  strokeDasharray={`${4.7 * 3.14159} 314.159`}
+                  strokeDashoffset={`-${(64.8 + 30.5) * 3.14159}`}
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
             
-            <QuestionTooltip 
-              questions={tooltipQuestions.allocation} 
-              isVisible={hoveredBox === 'allocation'} 
-            />
-          </div>
-
-          {/* Right: Risk Level */}
-          <div 
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('risk')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
-            <div style={{ textAlign: 'center' }}>
-              <h2 style={{
-                fontSize: '18px',
-                fontWeight: '600',
-                color: 'white',
-                marginBottom: '16px'
-              }}>
-                ⚖️ Risk Level
-              </h2>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'rgba(16, 185, 129, 0.2)',
-                color: '#10b981',
-                padding: '12px 20px',
-                borderRadius: '12px',
-                border: '1px solid rgba(16, 185, 129, 0.3)'
-              }}>
-                <span style={{ fontSize: '14px', fontWeight: '500' }}>Risk Level</span>
-                <span style={{ fontSize: '16px', fontWeight: 'bold' }}>Well Diversified</span>
+            {/* Legend */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: '#f7931a'
+                }}></div>
+                <span style={{ color: 'white', fontSize: '14px' }}>Bitcoin 64.8%</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: '#627eea'
+                }}></div>
+                <span style={{ color: 'white', fontSize: '14px' }}>Ethereum 30.5%</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: '#2775ca'
+                }}></div>
+                <span style={{ color: 'white', fontSize: '14px' }}>USD Coin 4.7%</span>
               </div>
             </div>
-            
-            <QuestionTooltip 
-              questions={tooltipQuestions.risk || [
-                "What's my current risk level?",
-                "How can I reduce portfolio risk?",
-                "Should I increase my risk exposure?"
-              ]} 
-              isVisible={hoveredBox === 'risk'} 
-            />
           </div>
         </div>
       </div>
@@ -485,25 +290,17 @@ const HomePage: React.FC = () => {
           alignItems: 'stretch'
         }}>
           {/* Left: Portfolio Increase */}
-          <div 
-            style={{
-              flex: 1,
-              position: 'relative',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '20px',
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('increase')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '20px',
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
             <div style={{
               width: '60px',
               height: '60px',
@@ -536,29 +333,16 @@ const HomePage: React.FC = () => {
                 increase since our last chat
               </div>
             </div>
-            
-            <QuestionTooltip 
-              questions={tooltipQuestions.increase} 
-              isVisible={hoveredBox === 'increase'} 
-            />
           </div>
 
           {/* Right: Current Holdings */}
-          <div 
-            style={{
-              flex: 2,
-              position: 'relative',
-              zIndex: 10,
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'help',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={() => setHoveredBox('holdings')}
-            onMouseLeave={() => setHoveredBox(null)}
-          >
+          <div style={{
+            flex: 2,
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '12px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
             <h2 style={{
               fontSize: '18px',
               fontWeight: '600',
@@ -659,15 +443,19 @@ const HomePage: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            <QuestionTooltip 
-              questions={tooltipQuestions.holdings} 
-              isVisible={hoveredBox === 'holdings'} 
-            />
           </div>
         </div>
       </div>
 
+      {/* Risk Level Widget */}
+      <Card className="p-6 mb-8">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full">
+            <span className="text-sm font-medium">Risk Level</span>
+            <span className="font-bold">Well Diversified</span>
+          </div>
+        </div>
+      </Card>
 
       {/* Current Prices Row */}
       <PriceTicker />
@@ -704,10 +492,7 @@ const HomePage: React.FC = () => {
         {/* Text Input */}
         <div style={{ display: 'flex', gap: '12px' }}>
           <input
-            ref={chatInputRef}
             type="text"
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
             placeholder="Ask me anything about your portfolio..."
             style={{
               flex: 1,

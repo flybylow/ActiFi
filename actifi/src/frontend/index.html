@@ -1,19 +1,24 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="ink:morpheus-theme">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ActiFi AI - Portfolio Advisor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@inkonchain/ink-kit@0.9.1-beta.19/dist/style.css">
     <script>
       // This will be injected by the server in production
       window.ELIZA_CONFIG = {
         agentId: 'actifi-portfolio-agent',
-        apiBase: 'http://localhost:3001',
+        apiBase: 'http://localhost:3000',
       };
     </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script src="/debug-ink-kit.js"></script>
   </body>
 </html>
