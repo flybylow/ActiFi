@@ -15,9 +15,9 @@ const queryClient = new QueryClient();
 // Simple layout wrapper component (fallback for InkPageLayout)
 const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="p-6">
-        <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background" style={{ paddingBottom: '120px' }}>
+      <div className="responsive-container">
+        <div className="responsive-grid">
           {children}
         </div>
       </div>
@@ -116,17 +116,20 @@ const HomePage: React.FC = () => {
         left: '0',
         right: '0',
         bottom: '0',
-        background: 'rgba(0, 0, 0, 0.7)',
+        background: 'rgba(0, 0, 0, 0.4)',
+        backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 999999
       }}>
         <div style={{
-          background: 'rgba(20, 20, 40, 0.95)',
-          borderRadius: '12px',
-          border: '2px solid rgba(102, 126, 234, 0.3)',
-          padding: '20px',
+          background: 'rgba(255, 255, 255, 0.22)',
+          backdropFilter: 'blur(60px)',
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          boxShadow: '0 12px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+          padding: '28px',
           minWidth: '360px',
           maxWidth: '420px',
           textAlign: 'center'
@@ -149,24 +152,28 @@ const HomePage: React.FC = () => {
               textAlign: 'left',
               padding: '12px 14px',
               marginBottom: index < questions.length - 1 ? '8px' : '0',
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
               border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '8px',
+              borderRadius: '16px',
               color: 'rgba(255, 255, 255, 0.95)',
               fontSize: '13px',
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              lineHeight: '1.5'
+              transition: 'all 0.3s ease',
+              lineHeight: '1.5',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.25)';
-              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.5)';
+              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.2)';
+              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.4)';
               e.currentTarget.style.transform = 'translateX(4px)';
+              e.currentTarget.style.boxShadow = '0 12px 40px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.22)';
               e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
               e.currentTarget.style.transform = 'translateX(0)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
             }}
           >
             {question}
@@ -217,33 +224,31 @@ const HomePage: React.FC = () => {
 
       {/* Combined Total Wallet and Portfolio Allocation */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        background: 'rgba(255, 255, 255, 0.12)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        backdropFilter: 'blur(35px)',
+        boxShadow: '0 16px 64px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
         padding: '24px',
-        marginBottom: '40px'
+        marginBottom: '24px'
       }}>
-        <div style={{
-          display: 'flex',
-          gap: '24px',
-          alignItems: 'stretch'
-        }}>
+        <div className="responsive-card-grid">
           {/* Left: Total Wallet */}
           <div 
+            className="responsive-card"
             style={{
-              flex: 1,
               position: 'relative',
               zIndex: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '20px',
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              gap: '12px',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               cursor: 'help',
               transition: 'all 0.3s ease'
             }}
@@ -251,23 +256,22 @@ const HomePage: React.FC = () => {
             onMouseLeave={() => setHoveredBox(null)}
           >
             <div style={{
-              width: '60px',
-              height: '60px',
+              width: '40px',
+              height: '40px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #10b981, #059669)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'white',
-              fontSize: '24px',
+              fontSize: '18px',
               fontWeight: 'bold'
             }}>
               💰
             </div>
             
             <div style={{ textAlign: 'center' }}>
-              <h2 style={{
-                fontSize: '18px',
+              <h2 className="responsive-text" style={{
                 fontWeight: '600',
                 color: 'white',
                 marginBottom: '12px'
@@ -275,15 +279,14 @@ const HomePage: React.FC = () => {
                 💼 Total Wallet Value
               </h2>
               <div style={{
-                fontSize: '2.5rem',
+                fontSize: '1.5rem',
                 fontWeight: 'bold',
                 color: '#10b981',
                 marginBottom: '8px'
               }}>
                 $26,689.32
               </div>
-              <div style={{
-                fontSize: '1rem',
+              <div className="responsive-text" style={{
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontWeight: '500'
               }}>
@@ -299,25 +302,26 @@ const HomePage: React.FC = () => {
 
           {/* Right: Portfolio Allocation */}
           <div 
+            className="responsive-card"
             style={{
-              flex: 1,
               position: 'relative',
               zIndex: 10,
-              padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               cursor: 'help',
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={() => setHoveredBox('allocation')}
             onMouseLeave={() => setHoveredBox(null)}
           >
-            <h2 style={{
-              fontSize: '18px',
+            <h2 className="responsive-text" style={{
               fontWeight: '600',
               color: 'white',
-              marginBottom: '20px',
+              marginBottom: '16px',
               textAlign: 'center'
             }}>
               📊 Portfolio Allocation
@@ -424,9 +428,11 @@ const HomePage: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               cursor: 'help',
               transition: 'all 0.3s ease'
             }}
@@ -471,12 +477,12 @@ const HomePage: React.FC = () => {
 
       {/* Combined Portfolio Increase and Current Holdings */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-        padding: '24px',
+        background: 'rgba(255, 255, 255, 0.12)',
+        borderRadius: '24px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        backdropFilter: 'blur(35px)',
+        boxShadow: '0 16px 64px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        padding: '28px',
         marginBottom: '40px'
       }}>
         <div style={{
@@ -495,9 +501,11 @@ const HomePage: React.FC = () => {
               justifyContent: 'center',
               gap: '20px',
               padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               cursor: 'help',
               transition: 'all 0.3s ease'
             }}
@@ -550,9 +558,11 @@ const HomePage: React.FC = () => {
               position: 'relative',
               zIndex: 10,
               padding: '20px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
               cursor: 'help',
               transition: 'all 0.3s ease'
             }}
@@ -581,9 +591,11 @@ const HomePage: React.FC = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(255, 255, 255, 0.22)',
+                  backdropFilter: 'blur(50px)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                   minWidth: '300px',
                   flexShrink: 0
                 }}>
@@ -674,32 +686,20 @@ const HomePage: React.FC = () => {
 
       {/* Chat Input */}
       <div style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: '16px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        position: 'fixed',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        background: 'rgba(255, 255, 255, 0.08)',
+        borderRadius: '20px 20px 0 0',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
+        borderBottom: 'none',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         padding: '24px',
-        marginBottom: '40px'
+        zIndex: 1000
       }}>
-        <h2 style={{
-          fontSize: '18px',
-          fontWeight: '600',
-          color: 'white',
-          marginBottom: '20px',
-          textAlign: 'center'
-        }}>
-          💬 Chat with ActiFi AI
-        </h2>
         
-        <p style={{
-          fontSize: '14px',
-          color: 'rgba(255, 255, 255, 0.7)',
-          textAlign: 'center',
-          marginBottom: '20px'
-        }}>
-          Ask questions about your portfolio, get investment advice, or request portfolio analysis
-        </p>
         
         {/* Text Input */}
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -711,43 +711,53 @@ const HomePage: React.FC = () => {
             placeholder="Ask me anything about your portfolio..."
             style={{
               flex: 1,
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '12px',
-              padding: '16px',
+              background: 'rgba(255, 255, 255, 0.22)',
+              backdropFilter: 'blur(50px)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '16px',
+              padding: '18px',
               fontSize: '16px',
               color: 'white',
-              outline: 'none'
+              outline: 'none',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              transition: 'all 0.3s ease'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = 'rgba(102, 126, 234, 0.5)';
-              e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+              e.target.style.borderColor = 'rgba(102, 126, 234, 0.6)';
+              e.target.style.boxShadow = '0 12px 48px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+              e.target.style.background = 'rgba(255, 255, 255, 0.22)';
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-              e.target.style.boxShadow = 'none';
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+              e.target.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
+              e.target.style.background = 'rgba(255, 255, 255, 0.22)';
             }}
           />
           <button
             style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'rgba(102, 126, 234, 0.22)',
+              backdropFilter: 'blur(50px)',
               color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '16px 24px',
+              border: '1px solid rgba(102, 126, 234, 0.4)',
+              borderRadius: '16px',
+              padding: '18px 28px',
               fontSize: '16px',
               fontWeight: '500',
               cursor: 'pointer',
-              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+              boxShadow: '0 12px 48px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
               transition: 'all 0.3s ease'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)';
+              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.3)';
+              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.6)';
+              e.currentTarget.style.boxShadow = '0 16px 64px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
+              e.currentTarget.style.background = 'rgba(102, 126, 234, 0.22)';
+              e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.4)';
+              e.currentTarget.style.boxShadow = '0 12px 48px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             }}
           >
             Send
@@ -778,11 +788,11 @@ const AnalyticsPage: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '16px',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          background: 'rgba(255, 255, 255, 0.22)',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(50px)',
+          boxShadow: '0 16px 64px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
           padding: '24px'
         }}>
           <img 
@@ -856,11 +866,11 @@ const SettingsPage: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '16px',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          background: 'rgba(255, 255, 255, 0.22)',
+          borderRadius: '24px',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(50px)',
+          boxShadow: '0 16px 64px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
           padding: '24px'
         }}>
           <img 
